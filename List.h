@@ -74,6 +74,9 @@ public:
 
 
     void deleteAt(int index) {
+        if (index < 0 || index >= size()) {
+            throw;
+        }
         Node<T>* node = elementAt(index);
         if (node->previous == nullptr && node->next == nullptr) {
             head = nullptr;
