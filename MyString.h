@@ -88,28 +88,11 @@ public:
     } 
 
     //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-   friend std::istream& operator>>(std::istream& is, MyString& str) {
-        // Usuniêcie istniej¹cych danych w obiekcie str
-        if (str.data != nullptr) {
-            delete[] str.data;
-            str.data = nullptr;
-            str.size = 0;
-        }
-
-        // Wczytanie danych ze strumienia is do bufora temp
-        const int bufferSize = 100; // Za³ó¿my, ¿e maksymalna d³ugoœæ wprowadzonego ci¹gu znaków to 100
-        char temp[bufferSize];
-        is.getline(temp, bufferSize);
-
-        // Przepisanie danych z bufora do obiektu str
-        str.size = strlen(temp);
-        str.data = new char[str.size];
-        for (int i = 0; i < str.size; ++i) {
-            str.data[i] = temp[i];
-        }
-
+    friend std::istream& operator>>(std::istream& is, MyString& str) {
+        char buffer[1024];
+        is >> buffer;
+        str = MyString(buffer);
         return is;
     }
-  
 
 };

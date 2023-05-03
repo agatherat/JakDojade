@@ -1,25 +1,27 @@
 #include <iostream>
-#include <string>
+//#include <MyString>
+#include <fstream>
 #include "List.h"
+#include "MyString.h"
 #define MAXINT  2147483647
 //#include "MyString.h"
 using namespace std;
 
 struct city {
-	string name;
+	MyString name;
 	int pozX;
 	int pozY;
 };
 
 struct trip {
-	string start;
-	string destination;
+	MyString start;
+	MyString destination;
 	int time;
 };
 
 struct question {
-	string town1;
-	string town2;
+	MyString town1;
+	MyString town2;
 	int type;
 };
 
@@ -44,10 +46,10 @@ std::ostream& operator<<(std::ostream& os, const trip& k) {
 	return os;
 }
 
-//struct coordinatesWithCounter {
-//	int counter;
-//	coordinates coordinates;
-//};
+struct coordinatesWithCounter {
+	int counter;
+	coordinates coordinates;
+};
 
 int height;
 int width;
@@ -64,7 +66,8 @@ bool isOnMap(int x, int y) {
 bool findLetter(int x, int y, char** map) {
 	//if(map[x][y] != '*' && map[x][y] != '.' && map[x][y] != '#'){
 	if (isOnMap(x, y)) {
-		if ((map[x][y] >= '0' && map[x][y] <= '9') || (map[x][y] >= 'A' && map[x][y] <= 'Z')) {
+        char letter = map[y][x];
+		if ((letter >= '0' && letter <= '9') || (letter >= 'A' && letter <= 'Z')) {
 			return true;
 		}
 		else return false;
@@ -72,10 +75,10 @@ bool findLetter(int x, int y, char** map) {
 	return false;
 }
 
-string findCityName(int x, int y, char** map) {
+MyString findCityName(int x, int y, char** map) {
 	//mamy jakas litere na miejscu x y
-	string tmp;
-	char litera;
+	MyString tmp;
+	//char litera;
 	int x1=x;
 	
 	//szukamy poczatku wyrazu
@@ -87,7 +90,7 @@ string findCityName(int x, int y, char** map) {
 	}
 
 	for (int i = x1; i < x; i++) {
-		tmp += map[i][y];
+		tmp = tmp + map[y][i];
 	}
 	x1 = x;
 	//koniec wyrazu
@@ -97,14 +100,14 @@ string findCityName(int x, int y, char** map) {
 	}
 	
 	for (int i = x; i <= x1; i++) {
-		tmp += map[i][y];
+		tmp = tmp+ map[y][i];
 	}
 	
 	return tmp;
 }
 
 
-void search(city firstCity, coordinates current, MyList<coordinates>& visited, MyList<trip>& trips, char** map, int distance = 1) {
+void search(city firstCity, coordinates current, MyList<coordinates> visited, MyList<trip>& trips, char** map, int distance = 1) {
 	visited.add(current);
 
 	coordinates coordinatesToCheck[] = {
@@ -117,7 +120,7 @@ void search(city firstCity, coordinates current, MyList<coordinates>& visited, M
 	for (int j = 0; j < 4; j++) {
 		coordinates newCoords = coordinatesToCheck[j];
 		if (isOnMap(newCoords.x, newCoords.y)) {
-			char character = map[newCoords.x][newCoords.y];
+			char character = map[newCoords.y][newCoords.x];
 			if (visited.find(newCoords) == nullptr) { //czemu sprawdzamy czy nullptr???
 				visited.add(newCoords); //dodajemy koordynaty do odwiedzonych
 
@@ -140,53 +143,61 @@ void search(city firstCity, coordinates current, MyList<coordinates>& visited, M
 			}
 		}
 	}
-	/*if (isOnMap(current.x, current.y - 1)) {
-		char character = map[current.x][current.y - 1];
-		coordinates newCoords = { current.x, current.y - 1 };
-		if (visited.find(newCoords) == nullptr) {
-			visited.add(newCoords);
+}
 
-			if (character == '#') {
-				search(firstCity, newCoords, visited, trips, map, distance + 1);
-			}
-			else if (character == '*') {
-				trip t;
-				t.start = firstCity.name;
-				for (int i = 0; i < cities.size(); i++) {
-					city c = cities.valueAt(0);
-					if (c.pozX == current.x && c.pozY == current.y) {
-						t.destination = c.name;
-						break;
-					}
+void bfs(city firstCity, coordinates firstCoords, MyList<trip>& trips, char** map) {
+	MyList<coordinates> visited;
+	MyList<coordinatesWithCounter> Q;
+	Q.add({1, firstCoords });
+	visited.add(firstCoords);
+	while (Q.size() > 0) {
+		coordinatesWithCounter newCurrent = Q.valueAt(0);
+		Q.deleteAt(0);
+
+		char character = map[newCurrent.coordinates.y][newCurrent.coordinates.x];
+		
+		coordinates coordinatesToCheck[] = {
+			{newCurrent.coordinates.x, newCurrent.coordinates.y - 1},
+			{newCurrent.coordinates.x, newCurrent.coordinates.y + 1},
+			{newCurrent.coordinates.x - 1, newCurrent.coordinates.y},
+			{newCurrent.coordinates.x + 1, newCurrent.coordinates.y}
+		};
+
+		for (int j = 0; j < 4; j++) {
+			coordinates newCoords = coordinatesToCheck[j];
+			if (isOnMap(newCoords.x, newCoords.y)) {
+				char character = map[newCoords.y][newCoords.x];
+				if (character == '#' && visited.find(newCoords) == nullptr) { //czemu sprawdzamy czy nullptr???
+					visited.add(newCoords); //dodajemy koordynaty do odwiedzonych
+					Q.add({ newCurrent.counter + 1, newCoords });
 				}
-				t.time = distance;
-				trips.add(t);
+				else if (character == '*') { //znalezlismy miasto
+					trip t;
+					t.start = firstCity.name;
+					for (int i = 0; i < cities.size(); i++) {
+						city c = cities.valueAt(i);
+						if (c.pozX == newCoords.x && c.pozY == newCoords.y) {
+							t.destination = c.name;
+							break;
+						}
+					}
+					t.time = newCurrent.counter;
+					trips.add(t); //dodajemy do trips
+				}
 			}
 		}
 	}
-	if (isOnMap(current.x, current.y + 1)) {
-		map[current.x][current.y + 1];
-
-	}
-	if (isOnMap(current.x - 1, current.y)) {
-		map[current.x - 1][current.y];
-
-	}
-	if (isOnMap(current.x + 1, current.y)) {
-		map[current.x + 1][current.y];
-
-	}*/
 }
 
 // https://eduinf.waw.pl/inf/alg/001_search/0138.php
 void x(question q) {
-	MyList<string> cityNames;
+	MyList<MyString> cityNames;
 	for (int i = 0; i < cities.size(); i++) {
 		cityNames.add(cities.valueAt(i).name);
 	}
 
-	/*MyList<string> S;
-	MyList<string> Q;
+	/*MyList<MyString> S;
+	MyList<MyString> Q;
 	for (int i = 0; i < cities.size(); i++) {
 		Q.add(cities.valueAt(i).name);
 	}*/
@@ -240,12 +251,20 @@ void x(question q) {
 
 
 		// K10
-		string currentCityName = cityNames.valueAt(minIndex);
+		MyString currentCityName = cityNames.valueAt(minIndex);
 		//MyList<int> neighbours;
+		Node<trip>* tmp = trips.head;
+		//int tripsSize = trips.size();
+		while (tmp != nullptr) {
+			trip currentTrip = tmp->value;
+
+			tmp = tmp->next;
+		/*}
+
 		for (int i = 0; i < trips.size(); i++) {
-			trip currentTrip = trips.valueAt(i);
+			trip currentTrip = trips.valueAt(i);*/
 			if (currentTrip.start == currentCityName) {
-				string neighbourName = currentTrip.destination;
+				MyString neighbourName = currentTrip.destination;
 				int neighbourIndex = cityNames.findindex(neighbourName);
 				if (Q.find(neighbourIndex) == nullptr) {
 					continue;
@@ -265,31 +284,37 @@ void x(question q) {
 		cout << cityNames.valueAt(p[i]) << ' ';
 	}
 	cout << endl;*/
-	cout << "CIty names: ";
-	cout << cityNames << endl;
-	for (int i = 0; i < cities.size(); i++) {
-		cout << d[i] << ' ';
-	}
-	cout << endl;
-
-	for (int i = 0; i < cities.size(); i++) {
-		cout << p[i] << ' ';
-	}
-	cout << endl;
+//	cout << "CIty names: ";
+//	cout << cityNames << endl;
+//	for (int i = 0; i < cities.size(); i++) {
+//		cout << d[i] << ' ';
+//	}
+//	cout << endl;
+//
+//	for (int i = 0; i < cities.size(); i++) {
+//		cout << p[i] << ' ';
+//	}
+//	cout << endl;
 
 
 	int destIndex = cityNames.findindex(q.town2);
-	cout << d[destIndex] << endl;
-	
+	cout << d[destIndex] << ' ';
 
-	int previousIndex = p[destIndex];
-	MyList<string> cityPath;
-	while (previousIndex != firstCityIndex) {
-		cityPath.add(cityNames.valueAt(previousIndex));
-		previousIndex = p[previousIndex];
+	MyList<MyString> cityPath;
+
+	if (destIndex != firstCityIndex) {
+		int previousIndex = p[destIndex];
+		while (previousIndex != firstCityIndex) {
+			cityPath.add(cityNames.valueAt(previousIndex));
+			previousIndex = p[previousIndex];
+		}
 	}
-	for (int i = cityPath.size() - 1; i >= 0; i--) {
-		cout << cityPath.valueAt(i) << ' ';
+	
+	
+	if (q.type == 1) {
+		for (int i = cityPath.size() - 1; i >= 0; i--) {
+			cout << cityPath.valueAt(i) << ' ';
+		}
 	}
 	cout << endl;
 }
@@ -307,20 +332,22 @@ int main() {
 	}
 	
 	// wczytanie wartoœci do tablicy
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			cin >> map[j][i];
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			cin >> map[i][j];
 		}
 	}
-	/*for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			cout << map[i][j];
-		}
-		cout << endl;
-	}*/
+
+//	for (int i = 0; i < height; i++) {
+//		for (int j = 0; j < width; j++) {
+//			cout << map[i][j];
+//		}
+//		cout << endl;
+//	}
 
 	cin >> flightCounter;
-
+	/*char znak; 
+	znak = getchar();*/
 	for (int i = 0; i < flightCounter; i++) {
 		trip plane;
 
@@ -331,31 +358,42 @@ int main() {
 		trips.add(plane); // dodajemy lot do listy mozliwych przejazdow 
 	}
 
+
 	cin >> questCounter;
-	question* quest = new question[questCounter];
+	MyList<question> quests;
 	for (int i = 0; i < questCounter; i++) {
-		cin >> quest[i].town1;
-		cin >> quest[i].town2;
-		cin >> quest[i].type;
+		question quest;
+
+		cin >> quest.town1;
+		cin >> quest.town2;
+		cin >> quest.type;
+		quests.add(quest); 
 	}
 
+	//question* quest = new question[questCounter];
+	//for (int i = 0; i < questCounter; i++) {
+	//	cin >> quest[i].town1;
+	//	cin >> quest[i].town2;
+	//	cin >> quest[i].type;
+	//}
+
 	//zapisywanie miast do listy
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
 			//szukanie gwiazdki z kazdej strony 
 			if (map[i][j] == '*') {
 				city c;
-				c.pozX = i;
-				c.pozY = j;
+				c.pozX = j;
+				c.pozY = i;
 
-				if (findLetter(i - 1, j, map)) { c.name = findCityName(i - 1, j, map); }
-				else if (findLetter(i + 1, j, map)) { c.name = findCityName(i + 1, j, map); }
-				else if (findLetter(i, j - 1, map)) { c.name = findCityName(i, j - 1, map); }
-				else if (findLetter(i, j + 1, map)) { c.name = findCityName(i, j + 1, map); }
-				else if (findLetter(i + 1, j + 1, map)) { c.name = findCityName(i + 1, j + 1, map); }
-				else if (findLetter(i - 1, j - 1, map)) { c.name = findCityName(i - 1, j - 1, map); }
-				else if (findLetter(i + 1, j - 1, map)) { c.name = findCityName(i + 1, j - 1, map); }
-				else if (findLetter(i - 1, j + 1, map)) { c.name = findCityName(i - 1, j + 1, map); }
+				if (findLetter(j - 1, i, map)) { c.name = findCityName(j - 1, i, map); }
+				else if (findLetter(j + 1, i, map)) { c.name = findCityName(j + 1, i, map); }
+				else if (findLetter(j, i - 1, map)) { c.name = findCityName(j, i - 1, map); }
+				else if (findLetter(j, i + 1, map)) { c.name = findCityName(j, i + 1, map); }
+				else if (findLetter(j + 1, i + 1, map)) { c.name = findCityName(j + 1, i + 1, map); }
+				else if (findLetter(j - 1, i - 1, map)) { c.name = findCityName(j - 1, i - 1, map); }
+				else if (findLetter(j + 1, i - 1, map)) { c.name = findCityName(j + 1, i - 1, map); }
+				else if (findLetter(j - 1, i + 1, map)) { c.name = findCityName(j - 1, i + 1, map); }
 				else throw;
 
 				cities.add(c); //dodanie miasta do tablicy
@@ -363,43 +401,28 @@ int main() {
 		}
 	}
 	
-
-
-
 	//szukanie najkrotszej drogi
-
-	//MyList <city>* array = new MyList<city>[cities.size()]; //tablica list (jedno miejsce w tablicy=polaczenia ze wszytskimi miastami)
 	for (int i = 0; i < cities.size(); i++) {
-		MyList<coordinates> visited;
-		search(cities.valueAt(i), { cities.valueAt(i).pozX, cities.valueAt(i).pozY }, visited, trips, map);
-
-	/*	MyList<trip> checked;
-		for (int j = 0; j < cities.size(); j++) {
-			checked.valueAt(j).
-		}*/
-		//array[i] =
-		//ile miast polaczonych jest z PIERWSZYM 
-		//ile trwaja dystanse (dlugosci krawedzi) 
-		//zapisywac miasta po ktorych idziemy
-	
-		//cities - wszytskie wierzcholki grafu?
-		//quest[i].town1 - wierzcholek poczatkowy
-
+		bfs(cities.valueAt(i), { cities.valueAt(i).pozX, cities.valueAt(i).pozY }, trips, map);
+		//MyList<coordinates> visited;
+		//search(cities.valueAt(i), { cities.valueAt(i).pozX, cities.valueAt(i).pozY }, visited, trips, map);
 	}
-	
 	
 	//szukanie wszytskich polaczen
 	//search(cities.valueAt(0), { cities.valueAt(0).pozX, cities.valueAt(0).pozY }, visited, trips, map);
 
-	//cout << trips;
+	//cout << trips << endl;
 	/*cout << "znalezione" << endl;
 	cout << quest[0].town1 << endl;
 	cout << quest[0].town2 << endl;
 	cout << trips;*/
 	for (int i = 0; i < questCounter; i++) {
-		x(quest[i]);
+		question q = quests.valueAt(i);
+		x(q);
+		///x(quest[i]);
 	}
-
+	//cout << trips << endl;
+	
 	// search for trips
 	/*for (int i = 0; i < cities.size(); i++) {
 		city c = cities.valueAt(i);

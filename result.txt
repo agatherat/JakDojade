@@ -1,0 +1,105 @@
+WYNIK 
+TEST 1 
+Comparing files ..\MAPA\1.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\1.out
+    1:  0
+***** OUTPUT.TXT
+*****
+
+TEST 2 
+Comparing files ..\MAPA\2.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\2.out
+    1:  23 EE FF
+***** OUTPUT.TXT
+*****
+
+TEST 3 
+Comparing files ..\MAPA\3.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\3.out
+    1:  76 B C D E F G H I J K L M N O P Q R S T U
+***** OUTPUT.TXT
+*****
+
+TEST 4 
+Comparing files ..\MAPA\4.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\4.out
+    1:  0
+***** OUTPUT.TXT
+*****
+
+TEST 5 
+Comparing files ..\MAPA\5.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\5.out
+    1:  99 AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAN AAO AAP AAQ AAR AAS AAT AAU AAV AAW AAX AAY AAZ AA0 AA1 AA2 AA3 AA4 AA5 
+***** OUTPUT.TXT
+*****
+
+TEST 6 
+Comparing files ..\MAPA\6.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\6.out
+    1:  99 AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAN AAO AAP AAQ AAR AAS AAT AAU AAV AAW AAX AAY AAZ AA0 AA1 AA2 AA3 AA4 AA5 
+***** OUTPUT.TXT
+*****
+
+TEST 7 
+Comparing files ..\MAPA\7.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\7.out
+    1:  99 AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAN AAO AAP AAQ AAR AAS AAT AAU AAV AAW AAX AAY AAZ AA0 AA1 AA2 AA3 AA4 AA5 
+***** OUTPUT.TXT
+*****
+
+TEST 8 
+Comparing files ..\MAPA\8.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\8.out
+    1:  1424 KRAKOW WAYPOINT5 WAYPOINT4 WAYPOINT3
+***** OUTPUT.TXT
+*****
+
+TEST 9 
+Comparing files ..\MAPA\9.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\9.out
+    1:  1549
+***** OUTPUT.TXT
+*****
+
+TEST 10 
+Comparing files ..\MAPA\10.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\10.out
+    1:  99999 AAAB AAAC AAAD AAAE AAAF AAAG AAAH AAAI AAAJ AAAK AAAL AAAM AAAN AAAO AAAP AAAQ AAAR AAAS AAAT AAAU AAAV AAAW AAAX AAAY A
+***** OUTPUT.TXT
+*****
+
+TEST 11 
+Comparing files ..\MAPA\11.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\11.out
+    1:  1179644
+***** OUTPUT.TXT
+*****
+
+TEST 12 
+Comparing files ..\MAPA\12.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\12.out
+    1:  99999 AAAB AAAC AAAD AAAE AAAF AAAG AAAH AAAI AAAJ AAAK AAAL AAAM AAAN AAAO AAAP AAAQ AAAR AAAS AAAT AAAU AAAV AAAW AAAX AAAY A
+***** OUTPUT.TXT
+*****
+
+TEST 13 
+Comparing files ..\MAPA\13.out and OUTPUT.TXT
+Resync Failed.  Files are too different.
+***** ..\MAPA\13.out
+    1:  2499 AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAN AAO AAP AAQ AAR AAS AAT AAU AAV AAW AAX AAY AAZ AA0 AA1 AA2 AA3 AA4 AA
+***** OUTPUT.TXT
+*****
+
