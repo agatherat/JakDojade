@@ -29,21 +29,36 @@ Tak nie będzie:/This is incorrect:
 
 
 Z A można dotrzeć do B:/It is possible to arrive from point A to B:
+
 ..................
+
 A*####...#####*B..
+
 .....#.C.#........
+
+
 .....##*##........
+
 ......
+
 .A**B.
+
 ......
 
 Z A nie można dotrzeć do B:/It is not possible to arrive from point A to B:
+
 ....##*B
+
 A*##....
+
 ....##*B
+
 A*#*C...
+
 ....*....
+
 A*##C##*B
+
 
 Wejście:/Input:
 W pierwszej linii wejścia pojawią się wymiary mapy: szerokość w i wysokość h. W następnych h liniach (każda po w znaków) podany będzie opis mapy. Każdy znak opisu to kropka (.) oznaczająca puste pole, krzyżyk (#) reprezentujący drogę, gwiazdka (*) symbolizujący miasto lub litera bądź cyfra, będąca częścią nazwy miasta.
@@ -62,27 +77,49 @@ For each query, output one line. At the beginning of the line should be the numb
 
 Przykład:/Example:
 Wejście:/Input:
+
 20 20
+
 .........GDANSK.....
+
 ........*...........
+
 ........#...........
+
 ........#...........
+
 *##################.
+
 #SZCZECIN.........#.
+
 #.................#.
+
 ##................#.
+
 .############*#####.
+
 .#...WARSZAWA.......
+
 .#..................
+
 .#############......
+
 .#...........#......
+
 .#..WROCLAW.##......
+
 .#..*.......*.......
+
 .####.......#KIELCE.
+
 ......*##.#########.
+
 .OPOLE..#.*.......#.
+
 ........#.KRAKOW..#.
+
 ........###########.
+
 0
 3
 KIELCE KRAKOW 0
