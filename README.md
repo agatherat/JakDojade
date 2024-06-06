@@ -8,15 +8,25 @@ The name will be unambiguously assigned to the city. There will be no number or 
 Przykłady:/Examples:
 
 Tak może być:/This can be:
+
 *GDANSK....OPOLE....RUMIA
+
 ...*GDYNIA......*....*...
+
 *SOPOT.............*....*
+
 ...PUCK*.*KRAKOW.REDA.HEL
+
 Tak nie będzie:/This is incorrect:
+
 **GDANSK..........OPOLE.
+
 ..........*GDYNIA*......
+
 *SOPOTHEL...............
+
 ........*..REDA.*PUCK*..
+
 
 Z A można dotrzeć do B:/It is possible to arrive from point A to B:
 ..................
